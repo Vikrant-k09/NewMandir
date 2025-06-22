@@ -1,20 +1,22 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const [user, loading] = useAuthState(auth);
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-[#FFF8E7]">
-        <p className="text-[#872341] text-xl animate-pulse">🔒 Checking access...</p>
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-dashed border-[#872341] rounded-full animate-spin mb-3"></div>
+          <p className="text-[#872341] font-medium animate-pulse">Checking access...</p>
+        </div>
       </div>
     );
   }
 
-  return user ? children : <Navigate to="/admin" replace />;
+  return user ? children : <Navigate to="/admin" />;
 };
 
 export default PrivateRoute;
